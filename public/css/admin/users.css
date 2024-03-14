@@ -1,0 +1,7 @@
+.span-display{
+    display: none;
+}
+.required:after {
+    content: " *";
+    color: red;
+}

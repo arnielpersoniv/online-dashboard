@@ -1,0 +1,81 @@
+.span-display{
+    display: none;
+}
+.required:after {
+    content: " *";
+    color: red;
+}
+.div-width{
+    width: fit-content;
+}
+
+.div-bg{
+    background: #fff; 
+    cursor: pointer; 
+    padding: 5px 10px; 
+    border: 1px solid #ccc; 
+    width: 100%
+}
+.h5-label{
+    text-align: center;
+    background-color: #0282bd;
+}
+.td-align {
+    text-align: center;
+}
+.th-bg{
+    background-color: #49b9ed;
+}
+.margin {
+    margin-left: 25px
+}
+
+.table th {
+    height: auto;
+    font-size: 10px;
+    padding: 5px 10px 2px;
+    border-bottom: 0;
+    text-align: center;
+    color: #666666;
+    background-color: #49CCED;
+}
+
+.table td {
+    height: auto;
+    text-align: center;
+}
+.class-total{
+    background-color: #f8ee62;
+}
+
+input {
+    margin-left: 7px;
+}
+
+.nopadding{
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+.selected-th-bg{
+    background-color: #f8ee62;
+}
+
+#myBtn {
+    display: none;
+    position: fixed;
+    bottom: 40px;
+    right: 30px;
+    z-index: 99;
+    font-size: 12px;
+    border: none;
+    outline: none;
+    color: white;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+  }
+  
+  #myBtn:hover {
+    background-color: #555;
+  }

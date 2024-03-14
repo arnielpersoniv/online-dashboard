@@ -1,0 +1,35 @@
+.span-display{
+    display: none;
+}
+.required:after {
+    content: " *";
+    color: red;
+}
+.hidden{
+    display: none;
+}
+div.dataTables_filter {
+    display: none;
+}
+.div-spinner{
+    text-align:center;
+}
+.i-spinner{
+    font-size:40px
+}
+
+.in-progress {
+    color: #64909E;
+}
+.pending {
+    color: #AC6363;
+}
+.done {
+    color: #75B468;
+}
+.div-width{
+    width: fit-content;
+}
+#reportrange {
+    width: auto;
+}

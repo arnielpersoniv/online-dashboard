@@ -110,7 +110,7 @@ const DASHBOARD = (() => {
 
             }
 
-            (tasks.length > 0) ? $('#tbl_daily').tableTotal() : null;
+            (tasks[0].length > 0) ? $('#tbl_daily').tableTotal() : null;
             // var table = $('#tbl_daily').dataTable({
             //     "bJQueryUI": true,
             // });
@@ -161,7 +161,7 @@ const DASHBOARD = (() => {
                 }
                 //toastr.success(response.data.message);
             }
-            (tasks.length > 0) ? $('#tbl_weekly').tableTotal() : null;
+            (tasks[0].length > 0) ? $('#tbl_weekly').tableTotal() : null;
             $('#btn_filter').empty();
             $('#btn_filter').append('<i class="fa fa-filter"></i> Filter');
             $('#btn_filter').prop("disabled", false);
@@ -205,7 +205,7 @@ const DASHBOARD = (() => {
                 //toastr.success(response.data.message);
             }
 
-            (tasks.length > 0) ? $('#tbl_monthly').tableTotal() : null;
+            (tasks[0].length > 0) ? $('#tbl_monthly').tableTotal() : null;
             $('#btn_filter').empty();
             $('#btn_filter').append('<i class="fa fa-filter"></i> Filter');
             $('#btn_filter').prop("disabled", false);
@@ -247,7 +247,7 @@ const DASHBOARD = (() => {
                 }
                 toastr.success(response.data.message);
             }
-            (tasks.length > 0) ? $('#tbl_yearly').tableTotal() : null;
+            (tasks[0].length > 0) ? $('#tbl_yearly').tableTotal() : null;
             $('#btn_filter').empty();
             $('#btn_filter').append('<i class="fa fa-filter"></i> Filter');
             $('#btn_filter').prop("disabled", false);

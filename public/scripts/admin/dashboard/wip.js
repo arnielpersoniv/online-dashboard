@@ -179,7 +179,7 @@ const DASHBOARD = (() => {
             }
             $("#tbl_agenttask tbody").append(row);
         }
-        (tasks.length > 0) ? $('#tbl_agenttask').tableTotal() : null;
+        (tasks[0].length > 0) ? $('#tbl_agenttask').tableTotal() : null;
     }
 
     this_dashboard.loadAllTask = (response) => {

@@ -20,6 +20,7 @@ class UserSeeder extends Seeder
             'email'         => 'itdev.admin@personiv.com',
             'role'          => 'admin',
             'password'      => '$2y$10$abaQE09KysUjikmz62U6OO46ccH6RGXnM0Zf.f1dTsc75EasMWa1G',//!Welcome18
+            'created_by'    => 1
         ];
 
         User::create($data);

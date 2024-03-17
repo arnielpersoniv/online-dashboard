@@ -144,7 +144,7 @@ const TASK = (() => {
                 }).then(function (response) {
                     if (response.data.status === 'success') {
                         toastr.success(response.data.message);
-                        STATUS.load();
+                        TASK.load();
                     }
 
                 }).catch(error => {

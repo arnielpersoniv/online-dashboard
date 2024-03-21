@@ -181,13 +181,13 @@ class ActivityController extends Controller
         $result = $this->successResponse('Task Successfully '.$status);
 
         try {
-            $data = $this->model->findOrFail($request->id);
+            $datas = $this->model->findOrFail($request->id);
             $this->model->findOrFail($request->id)->update($data);
         } catch (\Throwable $th) {
             $result = $this->errorResponse($th);
         }
 
-        LogActivity::addToLog(Auth::user()->id,'User Task', $data->account_no.' was '.$status ,$result['status']);
+        LogActivity::addToLog(Auth::user()->id,'User Task', $datas->account_no.' was '.$status ,$result['status']);
         return $this->returnResponse($result);
     }
 

@@ -11,7 +11,7 @@
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
-    <title>CS - Online Dashboard</title>
+    <title>Online Dashboard</title>
     <!-- Favicon icon -->
     <link rel="icon" href="{{asset('favicon.ico')}}" type="image/x-icon">
     <link rel="stylesheet" href="{{asset('css/login/bootstrap.min.css')}}" />

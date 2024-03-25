@@ -262,7 +262,7 @@ const DASHBOARD = (() => {
         var weekly = $('#label_weekly').text();
         var monthly = $('#txt_monthly').text();
         var yearly = $('#txt_yearly').text();
-        tablesToExcel(['tbl_daily', 'tbl_weekly', 'tbl_monthly', 'tbl_yearly'], ['Daily-' + daily, 'Weekly-' + weekly, 'Monthly-' + monthly, 'Yearly-' + yearly], 'CS Online Dashboard Report-Agent.xls', 'Excel')
+        tablesToExcel(['tbl_daily', 'tbl_weekly', 'tbl_monthly', 'tbl_yearly'], ['Daily-' + daily, 'Weekly-' + weekly, 'Monthly-' + monthly, 'Yearly-' + yearly], 'Online Dashboard Report-Agent.xls', 'Excel')
     })
 
     $('.btn_hide').on('click', function () {

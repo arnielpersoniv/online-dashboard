@@ -209,7 +209,7 @@ const DASHBOARD = (() => {
     $('#btn_export').on('click', function () {
         var date2 = $('#label_agent2').text();
         var date = $('#label_agent').text();
-        tablesToExcel(['tbl_agent','tbl_agenttask', 'tbl_task', 'tbl_task2'], [date + ' - (Agent)',date2 + ' - (Agent)', date + ' - (Task)', date + ' - (Task)'], 'CS Online Dashboard Report-Running Data.xls', 'Excel')
+        tablesToExcel(['tbl_agent','tbl_agenttask', 'tbl_task', 'tbl_task2'], [date + ' - (Agent)',date2 + ' - (Agent)', date + ' - (Task)', date + ' - (Task)'], 'Online Dashboard Report-Running Data.xls', 'Excel')
     })
 
 

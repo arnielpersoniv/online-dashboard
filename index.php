@@ -2,7 +2,7 @@
 
 <?php
 
-$loc = '/online-dashboard-uat/public/login';
+$loc = '/online-dashboard/public/login';
 header("Location: $loc");
 die(0);
 
@@ -13,11 +13,11 @@ die(0);
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="robots" content="noindex">
-	<title>CS - Online Dashboard</title>
+	<title>Online Dashboard</title>
 </head>
 <body>
 <h1>Hello World</h1>
 
-<a href="/online-dashboard-uat/public">Online Dashboard</a>
+<a href="/online-dashboard/public">Online Dashboard</a>
 </body>
 </html>

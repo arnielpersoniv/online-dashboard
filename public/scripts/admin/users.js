@@ -7,7 +7,16 @@ $(document).ready(function () {
     // Form Validation
     $("#form_user").validate({
         rules: {
+            emp_id: {
+                required: true
+            },
             name: {
+                required: true
+            },
+            email: {
+                required: true
+            },
+            role: {
                 required: true
             }
         },
@@ -68,8 +77,12 @@ const USER = (() => {
             var table;
             var x = 1;
             response.data.data.forEach(val => {
+                var profile = (val.profile != null) ? `<img src="../storage/profiles/${val.profile}" alt="profile" class="small-profile"/>
+                            <i class="typcn typcn-download btn-icon-append"></i>
+                        </a>` : '<img src="../themes/images/faces/avatar.png" alt="profile" class="small-profile"/>'
                 table += `<tr>
                         <td>${x}</td>
+                        <td>${profile}</td>
                         <td>${val.emp_id}</td>
                         <td>${val.name}</td>
                         <td>${val.email}</td>
@@ -82,8 +95,8 @@ const USER = (() => {
                             <div class="btn-group">
                                 <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle">Action <span class="caret"></span></button>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#" class="btn_show" id="${val.id}"><i class="icon-edit"></i> Edit</a></li>
-                                    <li><a href="#" class="btn_delete" id="${val.id}"><i class="icon-trash"></i> Delete</a></li>
+                                    <li><a href="#" class="btn_show" data-id="${val.id}"><i class="icon-edit"></i> Edit</a></li>
+                                    <li><a href="#" class="btn_delete" data-id="${val.id}"><i class="icon-trash"></i> Delete</a></li>
                                 </ul>
                             </div>
                         </td>
@@ -100,8 +113,8 @@ const USER = (() => {
     }
 
     $(document).on("click", ".btn_show", function (event) {
-        var target = event.target;
-        axios('user/show/' + target.id).then(function (response) {
+        var id = $(this).attr("data-id");
+        axios('user/show/' + id).then(function (response) {
             $('#btn_save').empty();
             $('#btn_save').append('Save changes');
             $('#btn_cancel').show();
@@ -116,13 +129,13 @@ const USER = (() => {
     });
 
     $(document).on("click", ".btn_delete", function (event) {
-        var target = event.target;
+        var id = $(this).attr("data-id");
         cxDialog({
             info: 'Are you sure you want to delete?',
             ok: () => {
                 axios({
                     method: 'post',
-                    url: 'user/delete/' + target.id,
+                    url: 'user/delete/' + id,
                 }).then(function (response) {
                     if (response.data.status === 'success') {
                         toastr.success(response.data.message);

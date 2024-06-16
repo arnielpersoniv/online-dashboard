@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<?php header("Content-Security-Policy: default-src 'self'; img-src 'self' data:;"); ?>
 
 <head>
     <meta charset="utf-8">
@@ -10,43 +11,95 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
-    <title>Unauthorized</title>
+    <title>401 Unauthorized</title>
     <!-- Favicon icon -->
     <link rel="icon" href="{{asset('favicon.ico')}}" type="image/x-icon">
-    <link rel="stylesheet" href="{{asset('css/login/bootstrap.min.css')}}" />
     <link rel="stylesheet" href="{{asset('css/login/login-10.css')}}" />
+    <link rel="stylesheet" href="{{asset('css/500.css')}}" />
 </head>
 
 <body>
-    <!-- Login 10 - Bootstrap Brain Component -->
-    <section class="py-5 py-md-8 py-xl-10">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5 col-xxl-4">
-                    <div class="mb-2">
-                        <div class="text-center mt-5">
-                            <a href="#!">
-                                <img src="./themes/img/personiv-logo.png" alt="BootstrapBrain Logo">
-                            </a>
+<div class="container">
+        <div class="error">
+            <h1>401</h1>
+            <h2>Unauthorized Access!</h2>
+            <p>Sorry, this is account problem. Contact system admin for checking.</p>
+            <a class="text-white font-weight-medium" href="{{url('login')}}">Back to Login</a>
+        </div>
+        <div class="stack-container">
+            <div class="card-container">
+                <div class="perspec div-style1">
+                    <div class="card">
+                        <div class="writing">
+                            <div class="topbar">
+                                <div class="red"></div>
+                                <div class="yellow"></div>
+                                <div class="green"></div>
+                            </div>
+                            <div class="code">
+                                <ul>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                    <div class="card border border-light-subtle rounded-4">
-                        <div class="card-body p-3 p-md-4 p-xl-5">
-                            <h1>Unauthorized Access Login!</h1>
-                            <div class="row gy-3 overflow-hidden">
-                                <div class="col-12">
-                                    <div class="d-grid">
-                                        <a href="{{url('/')}}" class="btn btn-primary btn-lg" id="btn_login">Back to Page</a>
-                                    </div>
-                                </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="perspec div-style2">
+                    <div class="card">
+                        <div class="writing">
+                            <div class="topbar">
+                                <div class="red"></div>
+                                <div class="yellow"></div>
+                                <div class="green"></div>
+                            </div>
+                            <div class="code">
+                                <ul>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="perspec div-style3">
+                    <div class="card">
+                        <div class="writing">
+                            <div class="topbar">
+                                <div class="red"></div>
+                                <div class="yellow"></div>
+                                <div class="green"></div>
+                            </div>
+                            <div class="code">
+                                <ul>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="perspec div-style4">
+                    <div class="card">
+                        <div class="writing">
+                            <div class="topbar">
+                                <div class="red"></div>
+                                <div class="yellow"></div>
+                                <div class="green"></div>
+                            </div>
+                            <div class="code">
+                                <ul>
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+    <div id="particles"></div>
+    <script src="{{asset('themes/js/3.7.1.jquery.min.js')}}"></script>
+    <script src="{{asset('js/login.js')}}"></script>
+    <script src="{{asset('js/500.js')}}"></script>
 </body>
-
 </html>

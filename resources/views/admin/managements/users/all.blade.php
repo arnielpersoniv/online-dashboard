@@ -66,6 +66,7 @@
                                     <thead>
                                         <tr>
                                             <th>No.</th>
+                                            <th>Profile</th>
                                             <th>Employee ID</th>
                                             <th>Employee Name</th>
                                             <th>Email Address</th>

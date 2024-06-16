@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Task;
+use App\Models\OpenInfraTask;
 use App\Models\User;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
@@ -15,61 +15,62 @@ class DashBoardWipServices
 
     public function __construct()
     {
-        $this->model = new Task();
+        $this->model = new OpenInfraTask();
         $this->user = new User();
     }
 
     //filter data
     public function loadAll($where)
     {
-        $taskdata = $this->model->whereNull('deleted_at')->get();
         $users = $this->user->where('role','agent')->whereNull('deleted_at')->get();
-        $query = DB::table('activities as a')
+        $query = DB::table('open_infra_tasks as a')
             ->join('users as b', function ($join) {
-                $join->on('a.released_by', '=', 'b.id');
-            })->join('tasks as c', function ($join) {
-                $join->on('a.task_id', '=', 'c.id');
+                $join->on('a.agent_id', '=', 'b.id');
             })
-            ->select('task_id', 'b.name as releasedby', DB::raw('DATE_FORMAT(a.created_at, "%Y-%m-%d") as datecreated'),)
-            ->where('status', '<>', 'completed')
-            ->whereNull('a.deleted_at');
+            ->select('task', 'name as releasedby', DB::raw('DATE_FORMAT(a.created_at, "%Y-%m-%d") as datecreated'),DB::raw('COUNT(task) as total'))
+            //->where('status', '<>', 'completed')
+            ->whereNull('a.deleted_at')
+            ->groupBy('task','name','a.created_at');
 
         if ($where['filter'] == 'daily') {
             $datelabel = date("F j, Y", strtotime($where['date']));
-            $query = $query->whereDate('a.created_at', $where['date']);
-            $results = $query->get();
+            $querries = $query->whereDate('a.created_at', $where['date']);
+            $results = $querries->get();
             $userdata = $this->getAgentData($users, $results, $datelabel);
-            $datatask = $this->getAllTask($taskdata, $results, $datelabel);
-            $usertask = $this->getAgentTaskData($users, $taskdata, $results, $datelabel);
-            $alltask  = $this->getAllTask($taskdata, $results, $datelabel);
-        } elseif ($where['filter'] == 'weekly') {
+            $datatask = $this->getAllTask($results, $datelabel);
+            $usertask = $this->getAgentTaskData($users, $results, $datelabel);
+            $alltask  = $this->getAllTask($results, $datelabel);
+        } 
+        elseif ($where['filter'] == 'weekly') {
             $datelabel = date("F", strtotime($where["date"]));
             $start = CarbonImmutable::parse($where['date']);
             $end = $start->addDays(6);
             $dateweeklabel = date("F", strtotime($where['date'])) . " " . date("d", strtotime($start)) . "-" . date("d", strtotime($end)) . ", " . date("Y", strtotime($where['date']));
-            $query = $query->whereBetween('a.created_at', [$start, $end]);
-            $results = $query->get();
+            $querries = $query->whereBetween('a.created_at', [$start, $end]);
+            $results = $querries->get();
             $userdata = $this->weeklyAgent($users, $results, $datelabel);
-            $datatask = $this->getWeeklyTask($taskdata, $results, $datelabel);
-            $usertask = $this->getAgentTaskData($users, $taskdata, $results, $dateweeklabel);
-            $alltask = $this->getTaskWeeklyData($taskdata, $results, $where["date"]);
-        } elseif ($where['filter'] == 'monthly') {
+            $datatask = $this->getWeeklyTask($results, $datelabel);
+            $usertask = $this->getAgentTaskData($users, $results, $dateweeklabel);
+            $alltask = $this->getTaskWeeklyData($results, $where["date"]);
+        } 
+        elseif ($where['filter'] == 'monthly') {
             $datelabel = date("F", strtotime($where["date"]));
             $month = explode("-", $where["date"]);
-            $query = $query->whereMonth('a.created_at', $month[1]);
-            $results = $query->get();
+            $querries = $query->whereMonth('a.created_at', $month[1]);
+            $results = $querries->get();
             $userdata = $this->getAgentData($users, $results, $datelabel);
-            $datatask = $this->getAllTask($taskdata, $results, $datelabel);
-            $usertask = $this->getAgentTaskData($users, $taskdata, $results, $datelabel);
-            $alltask = $this->getAllTask($taskdata, $results, $datelabel);
-        } elseif ($where['filter'] == 'yearly') {
+            $datatask = $this->getAllTask($results, $datelabel);
+            $usertask = $this->getAgentTaskData($users, $results, $datelabel);
+            $alltask = $this->getAllTask($results, $datelabel);
+        } 
+        elseif ($where['filter'] == 'yearly') {
             $datelabel = date("Y", strtotime($where["date"]));
-            $query = $query->whereYear('a.created_at', $where["date"]);
-            $results = $query->get();
+            $querries = $query->whereYear('a.created_at', $where["date"]);
+            $results = $querries->get();
             $userdata = $this->getAgentData($users, $results, $datelabel);
-            $datatask = $this->getAllTask($taskdata, $results, $datelabel);
-            $usertask = $this->getAgentTaskData($users, $taskdata, $results, $datelabel);
-            $alltask = $this->getAllTask($taskdata, $results, $datelabel);
+            $datatask = $this->getAllTask($results, $datelabel);
+            $usertask = $this->getAgentTaskData($users, $results, $datelabel);
+            $alltask = $this->getAllTask($results, $datelabel);
         }
         return [
             'agent' => $userdata,
@@ -80,24 +81,29 @@ class DashBoardWipServices
     }
 
     //daily, monthly, yearly task
-    public function getAllTask($taskdata, $results, $datelabel)
+    public function getAllTask($results, $datelabel)
     {
+        $temptaskempty = [];
+        foreach ($results as $key => $item) {
+            array_push($temptaskempty, $item->task);
+        }
+        $uniquetask = array_values(array_unique($temptaskempty));
         $datastorage = [];
         $labeldatastorage = [];
-        foreach ($taskdata as $key => $task) {
+        foreach ($uniquetask as $key => $task) {
             $temptasktotal = [];
             $result_array = [];
             $position = 0;
             $total = 0;
             foreach ($results as $key => $value) {
-                if ($task->id == $value->task_id) {
-                    $total += 1;
+                if ($task == $value->task) {
+                    $total += $value->total;
                 }
             }
             array_push($temptasktotal, $total);
             for ($x = 0; $x < count($temptasktotal); $x++) {
                 if ($x == $position) {
-                    $result_array[] = $task->name;
+                    $result_array[] = $task;
                 }
                 $result_array[] = $temptasktotal[$x];
             }
@@ -114,20 +120,25 @@ class DashBoardWipServices
     }
 
     //weekly task
-    public function getWeeklyTask($taskdata, $results, $datelabel)
+    public function getWeeklyTask($results, $datelabel)
     {
+        $temptaskempty = [];
+        foreach ($results as $key => $item) {
+            array_push($temptaskempty, $item->task);
+        }
+        $uniquetask = array_values(array_unique($temptaskempty));
         $weeklydata =  $this->getWeekDates($datelabel);
         $datastorage = [];
-        foreach ($taskdata as $key => $task) {
+        foreach ($uniquetask as $key => $task) {
             $temptasktotal = [];
             $result_array = [];
             $position = 0;
             foreach ($weeklydata[1] as $key => $weekly) {
                 $total = 0;
                 foreach ($results as $key => $value) {
-                    if ($task->id == $value->task_id) {
+                    if ($task == $value->task) {
                         if ($value->datecreated >= $weekly['startdate'] && $value->datecreated <= $weekly['enddate']) {
-                            $total += 1;
+                            $total += $value->total;
                         }
                     }
                 }
@@ -135,7 +146,7 @@ class DashBoardWipServices
             }
             for ($x = 0; $x < count($temptasktotal); $x++) {
                 if ($x == $position) {
-                    $result_array[] = $task->name;
+                    $result_array[] = $task;
                 }
                 $result_array[] = $temptasktotal[$x];
             }
@@ -170,7 +181,7 @@ class DashBoardWipServices
             foreach ($results as $key => $value) {
                 if ($value->releasedby == $unique_name) {
                     //$fname = $value->releasedby;
-                    $total += 1;
+                    $total += $value->total;
                 }
             }
             array_push($temptasktotal, $total);
@@ -213,7 +224,7 @@ class DashBoardWipServices
                     if ($value->releasedby == $unique_name) {
                         //$fname = $value->releasedby;
                         if ($value->datecreated >= $weekly['startdate'] && $value->datecreated <= $weekly['enddate']) {
-                            $total += 1;
+                            $total += $value->total;
                         }
                     }
                 }
@@ -237,13 +248,17 @@ class DashBoardWipServices
 
 
     //daily, monthly, yearly task
-    public function getAgentTaskData($users, $temptask, $results, $datelabel)
+    public function getAgentTaskData($users,$results, $datelabel)
     {
         $tempname = [];
         foreach ($users as $key => $value) {
             array_push($tempname, $value->name);
         }
-
+        $temptaskempty = [];
+        foreach ($results as $key => $item) {
+            array_push($temptaskempty, $item->task);
+        }
+        $uniquetask = array_values(array_unique($temptaskempty));
         $uniquename = array_values(array_unique($tempname));
         $temparaay = [];
         $datastorage = [];
@@ -254,18 +269,18 @@ class DashBoardWipServices
             $result_array = [];
             $totaltask = 0;
             $position = 0;
-            for ($i = 0; $i < count($temptask); $i++) {
+            for ($i = 0; $i < count($uniquetask); $i++) {
                 $count = 0;
                 foreach ($results as $key => $value) {
                     if ($uniquefullname == $value->releasedby) {
-                        if ($temptask[$i]['id'] == $value->task_id) {
+                        if ($uniquetask[$i] == $value->task) {
                             //$fname = $value->releasedby;
-                            $count += 1;
+                            $count += $value->total;
                         }
                     }
                 }
                 $totaltask += $count;
-                array_push($tasklistname,  $temptask[$i]['name']);
+                array_push($tasklistname,  $uniquetask[$i]);
                 array_push($tempholderarray, $count);
             }
             for ($x = 0; $x < count($tempholderarray); $x++) {
@@ -288,7 +303,7 @@ class DashBoardWipServices
     }
 
     //weekly task
-    public function getTaskWeeklyData($temptask, $results, $datelabel)
+    public function getTaskWeeklyData($results, $datelabel)
     {
        // set current date
        $date = $datelabel;
@@ -310,23 +325,29 @@ class DashBoardWipServices
            array_push($weeklydatelabel, date("l", $ts));
        }
 
+       $temptaskempty = [];
+        foreach ($results as $key => $item) {
+            array_push($temptaskempty, $item->task);
+        }
+        $uniquetask = array_values(array_unique($temptaskempty));
+
        $datastorage = [];
-       foreach ($temptask as $task) {
+       foreach ($uniquetask as $task) {
            $temptasktotal = [];
            $result_array = [];
            $position = 0;
            for ($i = 0; $i < count($weeklydate); $i++) {
                $total = 0;
                foreach ($results as $key => $value) {
-                   if ($task->id === $value->task_id && $weeklydate[$i] == $value->datecreated) {
-                       $total += 1;
+                   if ($task === $value->task && $weeklydate[$i] == $value->datecreated) {
+                       $total += $value->total;
                    }
                }
                array_push($temptasktotal, $total);
            }
            for ($x = 0; $x < count($temptasktotal); $x++) {
                if ($x == $position) {
-                   $result_array[] = $task->name;
+                   $result_array[] = $task;
                }
                $result_array[] = $temptasktotal[$x];
            }

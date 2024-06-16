@@ -8,6 +8,7 @@ use App\Http\Controllers\DashBoardController;
 use App\Http\Controllers\DashBoardTaskController;
 use App\Http\Controllers\DashBoardWipController;
 use App\Http\Controllers\LogsController;
+use App\Http\Controllers\OpenInfraTaskController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
@@ -47,15 +48,22 @@ Auth::routes(['register' => false]);
 Route::group(
     ['middleware' => ['verify.access','auth', 'web'],],
     function () {
+        Route::post('/upload', [UserController::class, 'upload'])->name('upload');
         Route::group(
             ['prefix' => 'task'],
             function () {
-                Route::get('/my-task', [PageController::class, 'showMyTasks']);
+                //Route::get('/my-task', [PageController::class, 'showMyTasks']);
+                Route::get('/agent-task', [PageController::class, 'showAgentTasks']);
                 Route::post('/all', [ActivityController::class, 'index']);
+                Route::post('/agent-all', [OpenInfraTaskController::class, 'index']);
                 Route::post('/store', [ActivityController::class, 'store']);
+                Route::post('/agent/store', [OpenInfraTaskController::class, 'store']);
                 Route::get('/show/{id}', [ActivityController::class, 'show']);
+                Route::get('/show/task/{lod_no}', [OpenInfraTaskController::class, 'show']);
                 Route::post('/delete/{id}', [ActivityController::class, 'destroy']);
+                Route::post('/agent-delete/{id}', [OpenInfraTaskController::class, 'destroy']);
                 Route::post('/action', [ActivityController::class, 'action']);
+                Route::post('/agent/running-data', [OpenInfraTaskController::class, 'showRunningData']);
             }
         );
         Route::group(
@@ -72,6 +80,7 @@ Route::group(
                 Route::get('/dashboard/task', [PageController::class, 'showDashBoardTask']);
                 Route::get('/dashboard/wip', [PageController::class, 'showDashBoardWip']);
                 Route::get('/all/task', [PageController::class, 'showTaskAll']);
+                Route::get('/all/agent-task', [PageController::class, 'showAgentTaskAll']);
                 Route::get('/attendance', [PageController::class, 'showAttendance']);
                 Route::get('/category', [PageController::class, 'showCategory']);
                 Route::get('/task', [PageController::class, 'showTasks']);

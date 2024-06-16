@@ -1,6 +1,21 @@
-
+const app_href = window.location.href;
+const app_host = window.location.origin;
+const split_url = app_href.split("/");
+const appname = split_url[3];
 
 $(document).ready(function () {
+
+  // === Tooltips === //
+	$('.tip').tooltip();	
+	$('.tip-left').tooltip({ placement: 'left' });	
+	$('.tip-right').tooltip({ placement: 'right' });	
+	$('.tip-top').tooltip({ placement: 'top' });	
+	$('.tip-bottom').tooltip({ placement: 'bottom' });	
+
+  toastr.options.closeButton = true;
+  toastr.options.progressBar = true;
+  toastr.options.hideEasing = 'linear';
+  toastr.options.positionClass = "toast-bottom-right";
 
   let mybutton = document.getElementById("myBtn");
 
@@ -20,6 +35,40 @@ $(document).ready(function () {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
   })
+
+  var IDLE_TIMEOUT = 300; //seconds
+  var _idleSecondsTimer = null;
+  var _idleSecondsCounter = 0;
+
+  document.onclick = function () {
+    _idleSecondsCounter = 0;
+  };
+
+  document.onmousemove = function () {
+    _idleSecondsCounter = 0;
+  };
+
+  document.onkeypress = function () {
+    _idleSecondsCounter = 0;
+  };
+
+  _idleSecondsTimer = window.setInterval(CheckIdleTime, 1000);
+
+  function CheckIdleTime() {
+    _idleSecondsCounter++;
+    var oPanel = document.getElementById("SecondsUntilExpire");
+    if (oPanel)
+      oPanel.innerHTML = (IDLE_TIMEOUT - _idleSecondsCounter) + "";
+    if (_idleSecondsCounter >= IDLE_TIMEOUT) {
+      window.clearInterval(_idleSecondsTimer);
+      cxDialog({
+        info: 'Your idle for 5 mins. The page need to refresh.<br>Click Confirm to continue.</p>',
+        ok: () => {
+          location.reload();
+        },
+      });
+    }
+  }
 })
 
 $('#btn_logout').on('click', function () {
@@ -32,6 +81,29 @@ $('#btn_logout').on('click', function () {
   });
 })
 
+$('#change_profile').on('click', function () {
+  $('#myModal').modal('show')
+})
+
+$(".editimgload").on('change', function () {
+  if (this.files && this.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      $('#editimgshow').attr('src', e.target.result);
+    }
+    reader.readAsDataURL(this.files[0]);
+  }
+});
+
+$('#btn_upload').on('click', function () {
+  cxDialog({
+    info: 'Are you sure you want to upload?',
+    ok: () => {
+      $('#form_upload').submit();
+    },
+    no: () => { },
+  });
+})
 
 function datatables(datableid) {
   var table = $('#' + datableid).dataTable({
@@ -40,7 +112,7 @@ function datatables(datableid) {
     "sDom": 'Blfrtip',
     "buttons": [{
       extend: 'excel',
-      text: "<button class='btn btn-success btn-sm'><i class='fa fa-file-excel-o'></i> Export</button>",
+      text: "<button class='btn btn-success btn-sm tip-top' data-original-title='Click to download'><i class='fa fa-file-excel-o'></i> Export</button>",
     }]
   });
   $("#searchbox").keyup(function () {

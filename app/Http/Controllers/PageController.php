@@ -65,6 +65,14 @@ class PageController extends Controller
         return view('admin.dashboard.all',compact('user'));
     }
 
+    public function showAgentTaskAll()
+    {
+        $this->setCredentials();
+        $user = $this->getCredentials();
+
+        return view('admin.dashboard.agent-all',compact('user'));
+    }
+
     public function showAttendance()
     {
         $this->setCredentials();
@@ -78,6 +86,13 @@ class PageController extends Controller
         $this->setCredentials();
         $user = $this->getCredentials();
         return view('users.agent.all',compact('user'));
+    }
+
+    public function showAgentTasks()
+    {
+        $this->setCredentials();
+        $user = $this->getCredentials();
+        return view('users.agent.agent-infra',compact('user'));
     }
 
     public function showCategory()

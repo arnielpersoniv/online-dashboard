@@ -123,4 +123,23 @@ class UserController extends Controller
         LogActivity::addToLog(Auth::user()->id,'Remove User', $data['name'].' was removed' ,$result['status']);
         return $this->returnResponse($result);
     }
+
+    public function upload(Request $request)
+    {
+        $result = $this->successResponse('Profile Successfully Changed');
+        try {
+            if ($request->file('file_name')) {
+                $file = $request->file('file_name');
+                $imageName = time()."-".$file->getClientOriginalName();
+                $id = Auth::user()->id;
+                $this->model->findOrFail($id)->update(['profile' => $imageName]);
+                $file->storeAs('profiles/', $imageName, 'public');
+            }
+            
+        } catch (\Throwable $th) {
+            $result = $this->errorResponse($th);
+        }
+        LogActivity::addToLog(Auth::user()->id,'Uplaod Profile', Auth::user()->name.' was upload a profile photo' ,$result['status']);
+        return redirect()->back();
+    }
 }

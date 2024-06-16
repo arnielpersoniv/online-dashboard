@@ -60,6 +60,10 @@ input {
 .selected-th-bg{
     background-color: #f8ee62;
 }
+.selected-td-bg{
+    background-color: #49CCED;
+    align-content: center;
+}
 
 #myBtn {
     display: none;

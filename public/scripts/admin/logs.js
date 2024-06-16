@@ -15,9 +15,12 @@ const LOGS = (() => {
             var table;
             var x = 1;
             response.data.data.forEach(val => {
+                var profile = (val.users.profile != null) ? `<img src="../storage/profiles/${val.users.profile}" alt="profile" class="small-profile"/>
+                            <i class="typcn typcn-download btn-icon-append"></i>
+                        </a>` : '<img src="../themes/images/faces/avatar.png" alt="profile" class="small-profile"/>'
                 table += `<tr>
                         <td>${x}</td>
-                        <td>${val.users.name}</td>
+                        <td>${profile} ${val.users.name}</td>
                         <td>${val.subject}</td>
                         <td>${val.action}</td>
                         <td>${val.status}</td>

@@ -2,7 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\Task;
+use App\Helpers\DashboardAgentTask;
+use App\Models\OpenInfraTask;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
@@ -11,77 +12,52 @@ class DashBoardTaskServices
 {
     public function __construct()
     {
-        $this->model = new Task();
+        $this->model = new OpenInfraTask();
     }
 
     //daily
     public function getDaily($where)
     {
-        $taskdata = $this->model->whereNull('deleted_at')->get();
-        $query = DB::table('activities as a')
-            ->join('tasks as b', function ($join) {
-                $join->on('a.task_id', '=', 'b.id');
-            })
-            ->select('task_id', DB::raw('COUNT(task_id) as total'))
-            ->where('status', '=', 'completed')
-            ->whereNull('a.deleted_at')
-            ->groupBy('task_id');
+        $query = $this->model->select('task', DB::raw('COUNT(task) as total'))
+            //->where('status', '=', 'DONE')
+            ->whereNull('deleted_at')
+            ->groupBy('task');
 
         if ($where['filter'] == 'all') {
             $date = date("F j, Y");
-            $query = $query->whereDate('a.created_at', Carbon::today());
+            $querries = $query->whereDate('created_at', Carbon::today());
         } else {
-            $query = $query->whereDate('a.created_at', $where['date']);
+            $querries = $query->whereDate('created_at', $where['date']);
             $date = date("F j, Y", strtotime($where['date']));
         }
-        $results = $query->get();
-
-        $datastorage = [];
-        foreach ($taskdata as $task) {
-            $total = 0;
-            foreach ($results as $key => $value) {
-                if ($task->id === $value->task_id) {
-                    $total += $value->total;
-                }
-            }
-            $datastorage[] = [
-                'taskname' => $task->name,
-                'total'     => $total,
-            ];
-        }
-
-        return [
-            'label' => $date,
-            'task'  => $datastorage
-        ];
+        $results = $querries->get();
+        return DashboardAgentTask::dashboardtask($results, $date);
     }
 
     //weekly
     public function getWeekly($where)
     {
-        $taskdata = $this->model->whereNull('deleted_at')->get();
-        $query = DB::table('activities as a')
-            ->join('tasks as b', function ($join) {
-                $join->on('a.task_id', '=', 'b.id');
-            })
-            ->select('task_id', DB::raw('DATE_FORMAT(a.created_at, "%Y-%m-%d") as datecreated'), DB::raw('COUNT(task_id) as total'))
-            ->where('status', '=', 'completed')
-            ->groupBy(['task_id', 'a.created_at'])
-            ->whereNull('a.deleted_at');
+        $query = $this->model->select('task', DB::raw('DATE_FORMAT(created_at, "%Y-%m-%d") as datecreated'), DB::raw('COUNT(task) as total'))
+            ->groupBy(['task', 'created_at']);
 
         if ($where['filter'] == 'all') {
             $weekdate = date('Y') . '-W' . date('W');
             $datelabel = date("F") . " " . date("d", strtotime(Carbon::now()->startOfWeek())) . "-" . date("d", strtotime(Carbon::now()->endOfWeek())) . ", " . date("Y");
-            $query = $query->whereBetween('a.created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+            $queries = $query->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
         } else {
             $weekdate = $where['date'];
             $start = CarbonImmutable::parse($where['date']);
             $end = $start->addDays(6);
-            $query = $query->whereBetween('a.created_at', [$start, $end]);
+            $queries = $query->whereBetween('created_at', [$start, $end]);
             $datelabel = date("F", strtotime($where['date'])) . " " . date("d", strtotime($start)) . "-" . date("d", strtotime($end)) . ", " . date("Y", strtotime($where['date']));
         }
 
-        $results = $query->get();
+        $results = $queries->get();
+        $temptaskempty = [];
+        foreach ($results as $key => $item) {
+            array_push($temptaskempty, $item->task);
+        }
+        $uniquetask = array_values(array_unique($temptaskempty));
 
         // set current date
         $date = $weekdate;
@@ -104,14 +80,14 @@ class DashBoardTaskServices
         }
 
         $datastorage = [];
-        foreach ($taskdata as $task) {
+        foreach ($uniquetask as $task) {
             $temptasktotal = [];
             $result_array = [];
             $position = 0;
             for ($i = 0; $i < count($weeklydate); $i++) {
                 $total = 0;
                 foreach ($results as $key => $value) {
-                    if ($task->id === $value->task_id && $weeklydate[$i] == $value->datecreated) {
+                    if ($task === $value->task && $weeklydate[$i] == $value->datecreated) {
                         $total += $value->total;
                     }
                 }
@@ -119,7 +95,7 @@ class DashBoardTaskServices
             }
             for ($x = 0; $x < count($temptasktotal); $x++) {
                 if ($x == $position) {
-                    $result_array[] = $task->name;
+                    $result_array[] = $task;
                 }
                 $result_array[] = $temptasktotal[$x];
             }
@@ -136,88 +112,41 @@ class DashBoardTaskServices
     //monthly
     public function getMonthly($where)
     {
-        $taskdata = $this->model->whereNull('deleted_at')->get();
-        $query = DB::table('activities as a')
-            ->join('tasks as b', function ($join) {
-                $join->on('a.task_id', '=', 'b.id');
-            })
-            ->select('task_id', DB::raw('COUNT(task_id) as total'))
-            ->where('status', '=', 'completed')
-            ->groupBy(['task_id'])
-            ->whereNull('a.deleted_at');
-
+        $query = $this->model->select('task', DB::raw('COUNT(task) as total'))
+            //->where('status', '=', 'DONE')
+            ->whereNull('deleted_at')
+            ->groupBy('task');
         if ($where['filter'] == 'all') {
             $date = date("F");
-            $query = $query->whereMonth('a.created_at', Carbon::now()->month);
+            $query = $query->whereMonth('created_at', Carbon::now()->month);
         } else {
             $month = explode("-", $where["date"]);
-            $query = $query->whereMonth('a.created_at', $month[1]);
+            $query = $query->whereMonth('created_at', $month[1]);
             $date = date("F", strtotime($where["date"]));
         }
-
         $results = $query->get();
-
-        $datastorage = [];
-        foreach ($taskdata as $task) {
-            $total = 0;
-            foreach ($results as $key => $value) {
-                if ($task->id === $value->task_id) {
-                    $total += $value->total;
-                }
-            }
-            $datastorage[] = [
-                'taskname' => $task->name,
-                'total'     => $total,
-            ];
-        }
-
-        return [
-            'label' => $date,
-            'task'  => $datastorage
-        ];
+        return DashboardAgentTask::dashboardtask($results, $date);
     }
 
     //yearly
 
     public function getYearly($where)
     {
-        $taskdata = $this->model->whereNull('deleted_at')->get();
-        $query = DB::table('activities as a')
-            ->join('tasks as b', function ($join) {
-                $join->on('a.task_id', '=', 'b.id');
-            })
-            ->select('task_id', DB::raw('COUNT(task_id) as total'))
-            ->where('status', '=', 'completed')
-            ->groupBy(['task_id'])
-            ->whereNull('a.deleted_at');
+        $query = $this->model->select('task', DB::raw('COUNT(task) as total'))
+        //->where('status', '=', 'DONE')
+        ->whereNull('deleted_at')
+        ->groupBy('task');
 
         if ($where['filter'] == 'all') {
             $date = date("Y");
-            $query = $query->whereYear('a.created_at', Carbon::now()->year);
+            $query = $query->whereYear('created_at', Carbon::now()->year);
         } else {
-            $query = $query->whereYear('a.created_at', $where["date"]);
+            $query = $query->whereYear('created_at', $where["date"]);
             $date = $where["date"];
         }
 
         $results = $query->get();
-        $datastorage = [];
-        foreach ($taskdata as $task) {
-            $total = 0;
-            foreach ($results as $key => $value) {
-                if ($task->id === $value->task_id) {
-                    $total += $value->total;
-                }
-            }
-            $datastorage[] = [
-                'taskname' => $task->name,
-                'total'     => $total,
-            ];
-        }
-
-        return [
-            'label' => $date,
-            'task'  => $datastorage
-        ];
+        return DashboardAgentTask::dashboardtask($results, $date);
 
     }
 }

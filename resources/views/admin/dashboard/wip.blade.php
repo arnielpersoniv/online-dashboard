@@ -6,7 +6,7 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="chat-message well div-width">
-            <button class="btn btn-success" id="btn_filter"><i class="fa fa-filter"></i> Filter</button>
+            <button class="btn btn-success tip-top" data-original-title="Filter Data" id="btn_filter"><i class="fa fa-filter"></i> Filter</button>
             <span class="input-box">
                 <div class="row">
                     <div class="span6">
@@ -30,7 +30,7 @@
             </ul>
         </div>
         <br>
-        <button class="btn btn-success" id="btn_export"><i class="fa fa-file-excel-o"></i> Export</button>
+        <button class="btn btn-success tip-top" data-original-title="Click to download" id="btn_export"><i class="fa fa-file-excel-o"></i> Export</button>
     </div>
     <div class="row-fluid">
         <div class="span6">

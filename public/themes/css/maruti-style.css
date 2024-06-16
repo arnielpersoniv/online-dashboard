@@ -28,13 +28,13 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 
 #header h1 {
     background: url("../img/logo.png") no-repeat scroll 0 0 transparent;
-    height: 31px;
+    height: 70px;
     left: 15px;
-    line-height: 600px;
+    line-height: 400px;
     overflow: hidden;
     position: relative;
-    top:20px; 
-    width: 191px;
+    top:10px; 
+    width: 600px;
 }
 
 #header h1 a {

@@ -1,7 +1,8 @@
 @include('layouts.head')
-    <!--custom css-->
-    @yield('css')
-    <!--close-custom css-->
+<!--custom css-->
+@yield('css')
+<!--close-custom css-->
+
 <body>
 
     <!--Header-part-->
@@ -23,16 +24,17 @@
 
     <div id="content">
         <div id="content-header">
-            <div id="breadcrumb"> 
+            <div id="breadcrumb">
                 <a href="{{url('/home')}}" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
                 <span class="currentpage"></span>
             </div>
         </div>
         @yield('content')
     </div>
+    @include('modal.profile')
     </div>
     </div>
-    <button class="btn btn-info" id="myBtn" title="Go to top">Back to Top</button>
+    <button class="btn btn-info tip-top" data-original-title="Go to top" id="myBtn">Back to Top</button>
     <!--footer-->
     @include('layouts.footer')
     <!--close-footer-->

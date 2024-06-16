@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<?php header("Content-Security-Policy: default-src 'self';"); ?>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,7 +10,6 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
     <title>Online Dashboard</title>
     <!-- Favicon icon -->
     <link rel="icon" href="{{asset('favicon.ico')}}" type="image/x-icon">
@@ -49,6 +48,7 @@
             </div>
         </div>
     </section>
+    <div id="particles"></div>
     <script src="{{asset('themes/js/3.7.1.jquery.min.js')}}"></script>
     <script src="{{asset('js/login.js')}}"></script>
 </body>

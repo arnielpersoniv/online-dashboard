@@ -101,7 +101,7 @@ class OpenInfraTaskController extends Controller
     {
         $result = $this->successResponse('Task Successfully Retrieve');
         try {
-            $data = $this->model->whereRaw("status =?", 'Pending')->whereRaw("lid_no =?", $lid_no)->first();
+            $data = $this->model->where('agent_id',auth()->user()->id)->whereRaw("status =?", 'Pending')->whereRaw("lid_no =?", $lid_no)->first();
             if ($data)
             {
                 $data['timestart'] = date('H:i:s',strtotime($data->time_start));

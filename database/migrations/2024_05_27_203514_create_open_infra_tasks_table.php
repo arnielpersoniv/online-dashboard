@@ -17,10 +17,10 @@ class CreateOpenInfraTasksTable extends Migration
             $table->id();
             $table->string('lid_no');
             $table->string('category');
+            $table->string('adhoc_category')->nullable();
             $table->string('task');
-            $table->string('status');
-            $table->string('adhoc')->nullable();
             $table->string('adhoc_task')->nullable();
+            $table->string('status');
             $table->unsignedBigInteger('agent_id');
             $table->dateTime('time_start');
             $table->dateTime('time_end')->nullable();

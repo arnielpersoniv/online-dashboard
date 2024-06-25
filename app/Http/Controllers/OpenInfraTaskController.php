@@ -58,24 +58,28 @@ class OpenInfraTaskController extends Controller
                 if ($count == 0) {
                     $request['agent_id'] = Auth::user()->id;
                     if ($request['status'] == 'Pending') {
-                        $request['time_start'] = now();
+                        $request['time_start'] = date("Y-m-d")." ".$request->txt_timestart;
                     } else {
-                        $request['time_start'] = now();
-                        $request['time_end'] = now();
+                        $request['time_start'] = date("Y-m-d")." ".$request->txt_timestart;
+                        $request['time_end'] = date("Y-m-d")." ".$request->txt_timeend;
                     }
 
-                    $result["data"] = $this->model->create($request->except(['edit_id']));
+                    $datas = $this->model->create($request->except(['edit_id','txt_timestart','txt_timeend']));
+                    $datas['timestart'] = date('H:i:s',strtotime($datas->time_start));
+                    $result["data"] = $datas;
                     $result["action"] = 'store';
                 } else
                     $result = $this->checkingResponse('<center>You have an ongoing Task</center>');
             } 
             else {
                 $data = [
-                    'lid_no'      => $request['lid_no'],
-                    'category'    => $request['category'],
-                    'task'        => $request['task'],
-                    'status'      => $request['status'],
-                    'adhoc'       => $request['adhoc'],
+                    'lid_no'            => $request['lid_no'],
+                    'category'          => $request['category'],
+                    'adhoc_category'    => $request['adhoc_category'],
+                    'task'              => $request['task'],
+                    'adhoc_task'        => $request['adhoc_task'],
+                    'status'            => $request['status'],
+                    'txt_timeend'       => $request['txt_timeend'],
                 ];
                 $result = $this->update($request->edit_id, $data);
             }
@@ -99,7 +103,10 @@ class OpenInfraTaskController extends Controller
         try {
             $data = $this->model->whereRaw("status =?", 'Pending')->whereRaw("lid_no =?", $lid_no)->first();
             if ($data)
+            {
+                $data['timestart'] = date('H:i:s',strtotime($data->time_start));
                 $result = $data;
+            }
             else
                 $result = 0;
         } catch (\Throwable $th) {
@@ -122,20 +129,22 @@ class OpenInfraTaskController extends Controller
         try {
             if($data["status"] == 'Pending'){
                 $datas = [
-                    'lid_no'      => $data['lid_no'],
-                    'category'    => $data['category'],
-                    'task'        => $data['task'],
-                    'status'      => $data['status'],
-                    'adhoc'       => $data['adhoc'],
+                    'lid_no'            => $data['lid_no'],
+                    'category'          => $data['category'],
+                    'adhoc_category'    => $data['adhoc_category'],
+                    'task'              => $data['task'],
+                    'adhoc_task'        => $data['adhoc_task'],
+                    'status'            => $data['status'],
                 ];
             }else{
                 $datas = [
-                    'lid_no'      => $data['lid_no'],
-                    'category'    => $data['category'],
-                    'task'        => $data['task'],
-                    'status'      => $data['status'],
-                    'adhoc'       => $data['adhoc'],
-                    'time_end'    => now()
+                    'lid_no'            => $data['lid_no'],
+                    'category'          => $data['category'],
+                    'adhoc_category'    => $data['adhoc_category'],
+                    'task'              => $data['task'],
+                    'adhoc_task'        => $data['adhoc_task'],
+                    'status'            => $data['status'],
+                    'time_end'          => date("Y-m-d")." ".$data['txt_timeend'],
                 ];
             }
             $this->model->findOrFail($id)->update($datas);

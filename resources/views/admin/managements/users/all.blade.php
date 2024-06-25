@@ -28,7 +28,7 @@
                                     <div class="control-group">
                                         <label class="control-label required">Formal Name</label>
                                         <div class="controls">
-                                            <input type="text" class="span11" name="name" id="fullname" placeholder="Employee Name" />
+                                            <input type="text" class="span11" name="name" id="fullname" placeholder="First Name and Last Name" />
                                         </div>
                                     </div>
                                     <div class="control-group">

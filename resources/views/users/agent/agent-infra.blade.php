@@ -30,9 +30,9 @@
                 <a href="#">
                     <h3>
                         @if(Auth::user()->profile != null)
-                        <img src="{{url('storage/profiles')}}/{{Auth::user()->profile}}" alt="profile" class="display_profile"/>
+                        <img src="{{url('storage/profiles')}}/{{Auth::user()->profile}}" alt="profile" class="display_profile" />
                         @else
-                        <img src="{{url('themes/images/faces/avatar.png')}}" alt="profile" class="display_profile"/>
+                        <img src="{{url('themes/images/faces/avatar.png')}}" alt="profile" class="display_profile" />
                         @endif
                         <br>
                         {{$user->name}} </h3>
@@ -59,11 +59,16 @@
                             <div class="widget-content nopadding">
                                 <form class="form-horizontal" method="post" id="form_task" novalidate="novalidate">
                                     @csrf
-                                    <input type="hidden" id="edit_id" name="edit_id">
+                                    <input type="hidden" id="edit_id" name="edit_id" />
                                     <div class="control-group">
                                         <label class="control-label required">LID No.</label>
                                         <div class="controls">
-                                            <input type="number" class="span11" name="lid_no" id="lid_no" placeholder="Search or Input LID No." autocomplete="off" />
+                                            <div class="input-append">
+                                                <input type="number" class="span11" name="lid_no" id="lid_no" placeholder="Input LID No."  autocomplete="off" />
+                                                <span class="add-on">
+                                                    <button type="button" class="tip-top" data-original-title="Verify LID No."><i class="fa fa-search icon-white"></i></button>
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="control-group">
@@ -75,7 +80,18 @@
                                                 <option value="Inbound">Inbound</option>
                                                 <option value="Text">Text</option>
                                                 <option value="E-mail">E-mail</option>
+                                                <option value="Appointment">Appointment</option>
+                                                <option value="ADHOC">ADHOC</option>
                                             </select>
+                                        </div>
+                                    </div>
+                                    <div class="control-group" id="div_adhoc_category">
+                                        <label class="control-label required">ADHOC</label>
+                                        <div class="controls">
+                                            <div class="input-append">
+                                                <input type="text" class="span11" name="adhoc_category" id="adhoc_category" required>
+                                                <span class="add-on"><i class="fa fa-pencil icon-white"></i></span>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="control-group">
@@ -96,26 +112,42 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="control-group" id="div_adhoc">
+                                    <div class="control-group" id="div_adhoc_task">
                                         <label class="control-label required">ADHOC</label>
                                         <div class="controls">
-                                            <input type="text" class="span11" name="adhoc" id="adhoc" required>
+                                        <div class="input-append">
+                                                <input type="text" class="span11" name="adhoc_task" id="adhoc_task" required>
+                                                <span class="add-on"><i class="fa fa-pencil icon-white"></i></span>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="control-group">
                                         <label class="control-label required">Status</label>
                                         <div class="controls">
-                                            <select class="select2" id="status" name="status">
-                                                <option value="" selected>Select Here</option>
-                                                <option value="Pending">Pending</option>
+                                            <select id="status" name="status">
+                                                <!-- <option value="" selected>Select Here</option> -->
+                                                <option value="Pending" selected>Pending</option>
                                                 <option value="Done">Done</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="control-group">
-                                        <label class="control-label" id="label_startend"></label>
+                                        <label class="control-label">Time Start</label>
                                         <div class="controls">
-                                            <input type="text" class="span11" value="{{date('g:i:s a')}}" readonly>
+                                            <div class="input-append">
+                                                <input type="text" class="span11" name="txt_timestart" id="txt_timestart" readonly>
+                                                <input type="text" class="span11" id="txt_timestart2" readonly>
+                                                <span class="add-on"><i class="fa fa-clock-o icon-white"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label">Time End</label>
+                                        <div class="controls">
+                                            <div class="input-append">
+                                                <input type="text" class="span11" name="txt_timeend" id="txt_timeend" readonly>
+                                                <span class="add-on"><i class="fa fa-clock-o icon-white"></i></span>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-actions">
@@ -140,16 +172,17 @@
                                             <th>Date</th>
                                             <th>LID No.</th>
                                             <th>Category</th>
+                                            <th>ADHOC Category</th>
                                             <th>Tasks</th>
+                                            <th>ADHOC Task</th>
                                             <th>Status</th>
-                                            <th>Adhoc</th>
                                             <th>Time Spent</th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
                                 </table>
-                                <div class="overlay div-spinner" id="loading"><i class="fa fa-spinner fa-pulse i-spinner"></i></div>
+                                <!-- <div class="overlay div-spinner" id="loading"><i class="fa fa-spinner fa-pulse i-spinner"></i></div> -->
                             </div>
                         </div>
                     </div>

@@ -73,11 +73,12 @@ class OpenInfraTaskService
                 'id'         => $value->id,
                 'lid_no'     => $value->lid_no,
                 'category'   => $value->category,
+                'adhoc_category'   => ($value->adhoc_category != null) ? $value->adhoc_category : '',
                 'task'       => $value->task,
+                'adhoc_task'       => ($value->adhoc_task != null) ? $value->adhoc_task : '',
                 'agent'      => $value->agent->name,
                 'profile'    => $value->agent->profile,
                 'status'     => $value->status,
-                'adhoc'      => ($value->adhoc != null) ? $value->adhoc : '',
                 'time_spent' => ($value->time_end != null) ? $totalspent : '-',
                 'created_at' => date("m/d/Y", strtotime($value->created_at)),
             ];

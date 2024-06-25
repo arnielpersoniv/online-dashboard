@@ -19,8 +19,11 @@ $(document).ready(function () {
     });
     AGENT_TASK.load($('#filter_option').val(), $('#slct_filter').val());
     AGENT_TASK.loadRunningData($('#filter_option').val(), $('#slct_filter').val());
+    AGENT_TASK.startTime();
     $('#label_startend').text("Time Start :");
-    $('#div_adhoc').hide();
+    $('#div_adhoc_category').hide();
+    $('#div_adhoc_task').hide();
+    $('#txt_timestart2').hide();
     // Form Validation
     $("#form_task").validate({
         rules: {
@@ -72,36 +75,40 @@ const AGENT_TASK = (() => {
                     data: formdata
                 }).then(function (response) {
                     if (response.data.status === 'success' && response.data.action == "store") {
-                        if(response.data.data.status == "Pending"){
+                        if (response.data.data.status == "Pending") {
                             $('#label_startend').empty();
                             $('#btn_save').empty();
-                            $('#btn_save').append('Complete');
+                            $('#btn_save').append('Update');
                             $('#btn_save').prop("disabled", false);
                             $('#btn_cancel').prop("disabled", false);
-                            $('#label_startend').text("Time End :");
+                            $('#txt_timestart').hide();
+                            $('#txt_timestart2').show();
+                            $('#txt_timestart2').val(response.data.data.timestart);
                             $('#edit_id').val(response.data.data.id)
                             $('#lid_no').val(response.data.data.lid_no)
                             $('#category').val(response.data.data.category).trigger('change')
                             $('#task').val(response.data.data.task).trigger('change')
-                            $('#status').val(response.data.data.status).trigger('change')
-                            $('#adhoc').val(response.data.data.adhoc)
+                            $('#status').val(response.data.data.status)
+                            // $('#status').val(response.data.data.status).trigger('change')
+                            $('#adhoc_category').val(response.data.data.adhoc_category)
+                            $('#adhoc_task').val(response.data.data.adhoc_task)
                         }
                         else {
-                            $('#label_startend').empty();
+                            $('#txt_timestart').show();
+                            $('#txt_timestart2').hide();
                             $('#btn_save').empty();
                             $('#btn_save').append('Submit');
                             $('#btn_save').prop("disabled", false);
                             $('#btn_cancel').prop("disabled", false);
-                            $('#label_startend').text("Time Start :");
                             $('#form_task')[0].reset();
                             $('#category').val(null).trigger('change')
                             $('#task').val(null).trigger('change')
-                            $('#status').val(null).trigger('change')
+                            // $('#status').val(null).trigger('change')
                         }
                         AGENT_TASK.load($('#filter_option').val(), $('#slct_filter').val());
                         AGENT_TASK.loadRunningData($('#filter_option').val(), $('#slct_filter').val())
                         toastr.success(response.data.message);
-                        
+
                     } else if (response.data.status === 'success' && response.data.action == "update") {
                         toastr.success(response.data.message);
                         $('#label_startend').empty();
@@ -109,11 +116,13 @@ const AGENT_TASK = (() => {
                         $('#btn_save').append('Submit');
                         $('#btn_save').prop("disabled", false);
                         $('#btn_cancel').prop("disabled", false);
-                        $('#label_startend').text("Time Start :");
+                        $('#txt_timestart').show();
+                        $('#txt_timestart2').hide();
                         $('#form_task')[0].reset();
+                        $('#edit_id').val(null)
                         $('#category').val(null).trigger('change')
                         $('#task').val(null).trigger('change')
-                        $('#status').val(null).trigger('change')
+                        // $('#status').val(null).trigger('change')
                         AGENT_TASK.load($('#filter_option').val(), $('#slct_filter').val());
                         AGENT_TASK.loadRunningData($('#filter_option').val(), $('#slct_filter').val());
                     }
@@ -227,9 +236,10 @@ const AGENT_TASK = (() => {
                         <td>${val.created_at}</td>
                         <td>${val.lid_no}</td>
                         <td>${val.category}</td>
+                        <td>${val.adhoc_category}</td>
                         <td>${val.task}</td>
+                        <td>${val.adhoc_task}</td>
                         <td>${status}</td>
-                        <td>${val.adhoc}</td>
                         <td>${val.time_spent}</td>
                         <td><button class="btn btn-danger btn-mini btn_delete" data-id="${val.id}"><i class="icon-trash"></i> Delete</button></td>
                      </tr>`;
@@ -304,8 +314,8 @@ const AGENT_TASK = (() => {
     $("#lid_no").on("change", function () {
         var lid_no = $('#lid_no').val();
         $('#category').prop("disabled", true)
+        $('#txt_timestart').val(null);
         axios('show/task/' + lid_no).then(function (response) {
-            console.log(response.data)
             if (response.data != 0) {
                 $('#category').prop("disabled", false)
                 $('#label_startend').empty();
@@ -313,13 +323,18 @@ const AGENT_TASK = (() => {
                 $('#btn_save').append('Complete');
                 $('#btn_save').prop("disabled", false);
                 $('#btn_cancel').prop("disabled", false);
-                $('#label_startend').text("Time End :");
+                $('#txt_timestart').hide();
+                $('#txt_timestart2').show();
+                $('#txt_timestart2').val(response.data.timestart);
                 $('#edit_id').val(response.data.id)
                 $('#lid_no').val(response.data.lid_no)
                 $('#category').val(response.data.category).trigger('change')
+                $('#adhoc_category').val(response.data.adhoc_category)
                 $('#task').val(response.data.task).trigger('change')
-                $('#status').val(response.data.status).trigger('change')
-                $('#adhoc').val(response.data.adhoc)
+                $('#adhoc_task').val(response.data.adhoc_task)
+                // $('#status').val(response.data.status).trigger('change')
+                $('#status').val(response.data.status)
+
             } else {
                 $('#category').prop("disabled", false)
                 $('#label_startend').empty();
@@ -327,15 +342,15 @@ const AGENT_TASK = (() => {
                 $('#btn_save').append('Submit');
                 $('#btn_save').prop("disabled", false);
                 $('#btn_cancel').prop("disabled", false);
-                $('#label_startend').text("Time Start :");
+                $('#txt_timestart').show();
+                $('#txt_timestart2').hide();
                 $('#lid_no').val(lid_no)
                 $('#category').val(null).trigger('change')
                 $('#task').val(null).trigger('change')
-                $('#status').val(null).trigger('change')
-                $('#adhoc').val(null)
+                // $('#status').val(null).trigger('change')
+                $('#adhoc_category').val(null)
+                $('#adhoc_task').val(null)
             }
-
-
         }).catch(error => {
             toastr.error(error);
         });
@@ -363,12 +378,32 @@ const AGENT_TASK = (() => {
         });
     });
 
+    $('#category').on('change', () => {
+        var category = $("#category option:selected").val();
+        if (category == "ADHOC")
+            $("#div_adhoc_category").show();
+        else
+            $("#div_adhoc_category").hide();
+    })
+
     $('#task').on('change', () => {
         var task = $("#task option:selected").val();
         if (task == "ADHOC")
-            $("#div_adhoc").show();
+            $("#div_adhoc_task").show();
         else
-            $("#div_adhoc").hide();
+            $("#div_adhoc_task").hide();
+    })
+
+    $('#status').on('change', () => {
+        var status = $("#status option:selected").val();
+        if (status == "Pending") {
+            $('#btn_save').empty();
+            $('#btn_save').append('Submit');
+        }
+        else if (status == "Done") {
+            $('#btn_save').empty();
+            $('#btn_save').append('Complete');
+        }
     })
 
     $('#btn_cancel').on('click', () => {
@@ -379,6 +414,23 @@ const AGENT_TASK = (() => {
         $('#status').val(null).trigger('change')
         $('#task').val(null).trigger('change')
     })
+
+    this_agent_task.startTime = () => {
+        const today = new Date();
+        let h = today.getHours();
+        let m = today.getMinutes();
+        let s = today.getSeconds();
+        m = this_agent_task.checkTime(m);
+        s = this_agent_task.checkTime(s);
+        document.getElementById('txt_timestart').value = h + ":" + m + ":" + s;
+        document.getElementById('txt_timeend').value = h + ":" + m + ":" + s;
+        setTimeout(AGENT_TASK.startTime, 1000);
+    }
+
+    this_agent_task.checkTime = (i) => {
+        if (i < 10) { i = "0" + i };  // add zero in front of numbers < 10
+        return i;
+    }
 
     return this_agent_task;
 })()

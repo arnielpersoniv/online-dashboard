@@ -313,11 +313,11 @@ const AGENT_TASK = (() => {
 
     $("#lid_no").on("change", function () {
         var lid_no = $('#lid_no').val();
-        $('#category').prop("disabled", true)
+        //$('#category').prop("disabled", true)
         $('#txt_timestart').val(null);
         axios('show/task/' + lid_no).then(function (response) {
             if (response.data != 0) {
-                $('#category').prop("disabled", false)
+                //$('#category').prop("disabled", false)
                 $('#label_startend').empty();
                 $('#btn_save').empty();
                 $('#btn_save').append('Complete');
@@ -336,7 +336,7 @@ const AGENT_TASK = (() => {
                 $('#status').val(response.data.status)
 
             } else {
-                $('#category').prop("disabled", false)
+                //$('#category').prop("disabled", false)
                 $('#label_startend').empty();
                 $('#btn_save').empty();
                 $('#btn_save').append('Submit');

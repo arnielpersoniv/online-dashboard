@@ -100,8 +100,9 @@ const AGENT_ALL_TASK = (() => {
                         <td>${val.created_at}</td>
                         <td>${val.lid_no}</td>
                         <td>${val.category}</td>
+                        <td>${val.adhoc_category}</td>
                         <td>${val.task}</td>
-                        <td>${val.adhoc}</td>
+                        <td>${val.adhoc_task}</td>
                         <td>${status}</td>
                         <td>${val.agent}</td>
                         <td>${val.time_spent}</td>

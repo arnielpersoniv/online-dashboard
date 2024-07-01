@@ -26,7 +26,7 @@
                     <div class="mb-2">
                         <div class="text-center mt-5">
                             <a href="#!">
-                                <img src="../themes/img/personiv-logo.png" alt="BootstrapBrain Logo">
+                                <img src="{{url('themes/img/personiv-logo.png')}}" alt="BootstrapBrain Logo">
                             </a>
                         </div>
                     </div>

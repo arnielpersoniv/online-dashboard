@@ -52,8 +52,9 @@
                                             <th>Date</th>
                                             <th>LID No.</th>
                                             <th>Category</th>
+                                            <th>Adhoc Category</th>
                                             <th>Tasks</th>
-                                            <th>Adhoc</th>
+                                            <th>Adhoc Task</th>
                                             <th>Status</th>
                                             <th>Released By</th>
                                             <th>Time Spent</th>

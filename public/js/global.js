@@ -36,7 +36,7 @@ $(document).ready(function () {
     document.documentElement.scrollTop = 0;
   })
 
-  var IDLE_TIMEOUT = 300; //seconds
+  var IDLE_TIMEOUT = 600; //seconds
   var _idleSecondsTimer = null;
   var _idleSecondsCounter = 0;
 

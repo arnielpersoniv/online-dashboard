@@ -80,7 +80,7 @@
                                                 <option value="Inbound">Inbound</option>
                                                 <option value="Text">Text</option>
                                                 <option value="E-mail">E-mail</option>
-                                                <option value="Appointment">Appointment</option>
+                                                <option value="Appointment">Appointlet</option>
                                                 <option value="ADHOC">ADHOC</option>
                                             </select>
                                         </div>

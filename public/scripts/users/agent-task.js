@@ -64,6 +64,7 @@ const AGENT_TASK = (() => {
             info: 'Are you sure you want to submit?',
             ok: () => {
                 var formdata = new FormData(this);
+                formdata.append('timezone', Intl.DateTimeFormat().resolvedOptions().timeZone);
                 $('#btn_save').empty();
                 $('#btn_save').append('<i class="fa fa-spinner fa-spin"></i> Loading...');
                 $('#btn_save').prop("disabled", true);

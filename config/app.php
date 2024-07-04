@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'Asia/Singapore',
+    'timezone' => date_default_timezone_get(),
 
     /*
     |--------------------------------------------------------------------------

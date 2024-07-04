@@ -62,7 +62,7 @@ $(document).ready(function () {
     if (_idleSecondsCounter >= IDLE_TIMEOUT) {
       window.clearInterval(_idleSecondsTimer);
       cxDialog({
-        info: 'Your idle for 5 mins. The page need to refresh.<br>Click Confirm to continue.</p>',
+        info: 'Your idle for 10 mins. The page need to refresh.<br>Click Confirm to continue.</p>',
         ok: () => {
           location.reload();
         },

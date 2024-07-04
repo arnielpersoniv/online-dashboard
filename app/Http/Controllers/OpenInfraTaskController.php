@@ -50,6 +50,13 @@ class OpenInfraTaskController extends Controller
      */
     public function store(OpenInfraRequest $request)
     {
+        // Assuming 'timezone' is sent as a parameter from the client
+        $timezone = $request->input('timezone');
+        //return $timezone;
+        // Store the timezone in the session or user preferences (optional)
+        config(['app.timezone' => $timezone]);
+        date_default_timezone_set($timezone);
+
         $result = $this->successResponse('Task Successfully Started');
         try {
             $count = 0;
@@ -64,7 +71,7 @@ class OpenInfraTaskController extends Controller
                         $request['time_end'] = date("Y-m-d")." ".$request->txt_timeend;
                     }
 
-                    $datas = $this->model->create($request->except(['edit_id','txt_timestart','txt_timeend']));
+                    $datas = $this->model->create($request->except(['edit_id','txt_timestart','txt_timeend','timezone']));
                     $datas['timestart'] = date('H:i:s',strtotime($datas->time_start));
                     $result["data"] = $datas;
                     $result["action"] = 'store';

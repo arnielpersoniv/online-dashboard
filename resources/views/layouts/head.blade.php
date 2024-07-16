@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<?php header("Content-Security-Policy: default-src 'self'; img-src 'self' data:;"); ?>
+{{--<?php header("Content-Security-Policy: default-src 'self'; img-src 'self' data:;"); ?> --}}
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">

@@ -28,8 +28,9 @@ class DashBoardServices
                 $join->on('a.agent_id', '=', 'b.id');
             })
             ->select('task','b.name as releasedby')
-            ->whereNull('a.deleted_at')
-            ->groupBy('task','b.name');
+            ->whereNull('a.deleted_at');
+            //->groupBy('task','b.name');
+
 
         if ($where['filter'] == 'all') {
             $date = date("F j, Y");
@@ -51,8 +52,8 @@ class DashBoardServices
                 $join->on('a.agent_id', '=', 'b.id');
             })
             ->select('task','b.name as releasedby')
-            ->whereNull('a.deleted_at')
-            ->groupBy('task','b.name');
+            ->whereNull('a.deleted_at');
+            //->groupBy('task','b.name');
 
         if ($where['filter'] == 'all') {
             $date = date("F") . " " . date("d", strtotime(Carbon::now()->startOfWeek())) . "-" . date("d", strtotime(Carbon::now()->endOfWeek())) . ", " . date("Y");
@@ -76,8 +77,8 @@ class DashBoardServices
                 $join->on('a.agent_id', '=', 'b.id');
             })
             ->select('task','b.name as releasedby')
-            ->whereNull('a.deleted_at')
-            ->groupBy('task','b.name');
+            ->whereNull('a.deleted_at');
+            //->groupBy('task','b.name');
 
         if ($where['filter'] == 'all') {
             $date = date("F");
@@ -101,8 +102,8 @@ class DashBoardServices
                 $join->on('a.agent_id', '=', 'b.id');
             })
             ->select('task','b.name as releasedby')
-            ->whereNull('a.deleted_at')
-            ->groupBy('task','b.name');
+            ->whereNull('a.deleted_at');
+            //->groupBy('task','b.name');
         if ($where['filter'] == 'all') {
             $date = date("Y");
             $query = $query->whereYear('a.created_at', Carbon::now()->year);

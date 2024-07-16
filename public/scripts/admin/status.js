@@ -36,7 +36,7 @@ const STATUS = (() => {
         // Send a POST request
         axios({
             method: 'post',
-            url: 'status/store',
+            url: `${APP_URL}/status/store`,
             data: formdata
         }).then(function (response) {
             console.log(response)
@@ -61,7 +61,7 @@ const STATUS = (() => {
     });
 
     this_status.load = () => {
-        axios('status/all').then(function (response) {
+        axios(`${APP_URL}/status/all`).then(function (response) {
             $('#tbl_status').DataTable().destroy();
             var table;
             var x = 1;
@@ -101,7 +101,7 @@ const STATUS = (() => {
     document.addEventListener("click", function (event) {
         var target = event.target;
         if (this_status.isElement(target, 'btn_show')) {
-            axios('status/show/' + target.id).then(function (response) {
+            axios(`${APP_URL}/status/show/` + target.id).then(function (response) {
                 $('#btn_save').empty();
                 $('#btn_save').append('Save changes');
                 $('#btn_cancel').show();
@@ -121,7 +121,7 @@ const STATUS = (() => {
                 ok: () => {
                     axios({
                         method: 'post',
-                        url: 'status/delete/' + target.id,
+                        url: `${APP_URL}/status/delete/` + target.id,
                     }).then(function (response) {
                         if (response.data.status === 'success') {
                             toastr.success(response.data.message);

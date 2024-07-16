@@ -81,7 +81,7 @@ const DASHBOARD = (() => {
         }
         axios({
             method: 'post',
-            url: 'admin/agent/report/daily',
+            url: `${APP_URL}/admin/agent/report/daily`,
             data: datas
         }).then(function (response) {
             $("#tbl_daily tbody").empty();
@@ -134,7 +134,7 @@ const DASHBOARD = (() => {
         }
         axios({
             method: 'post',
-            url: 'admin/agent/report/weekly',
+            url: `${APP_URL}/admin/agent/report/weekly`,
             data: datas
         }).then(function (response) {
             $("#tbl_weekly tbody").empty();
@@ -178,7 +178,7 @@ const DASHBOARD = (() => {
         }
         axios({
             method: 'post',
-            url: 'admin/agent/report/monthly',
+            url: `${APP_URL}/admin/agent/report/monthly`,
             data: datas
         }).then(function (response) {
             $("#tbl_monthly tbody").empty();
@@ -221,7 +221,7 @@ const DASHBOARD = (() => {
         }
         axios({
             method: 'post',
-            url: 'admin/agent/report/yearly',
+            url: `${APP_URL}/admin/agent/report/yearly`,
             data: datas
         }).then(function (response) {
             $("#tbl_yearly tbody").empty();

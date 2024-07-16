@@ -45,7 +45,7 @@ const TASK = (() => {
         // Send a POST request
         axios({
             method: 'post',
-            url: 'task/store',
+            url: `${APP_URL}/admin/task/store`,
             data: formdata
         }).then(function (response) {
             if (response.data.status === 'success') {
@@ -71,7 +71,7 @@ const TASK = (() => {
 
     this_task.load = () => {
         $("#loading").show();
-        axios('task/all').then(function (response) {
+        axios(`${APP_URL}/admin/task/all`).then(function (response) {
             $('#tbl_task').DataTable().destroy();
             var table;
             var x = 1;
@@ -107,7 +107,7 @@ const TASK = (() => {
 
     this_task.category = () => {
         $('#category_id').prop("disabled", true);
-        axios('../show/all').then(function (response) {
+        axios(`${APP_URL}/admin/show/all`).then(function (response) {
             var category_id = `<option value="">Select Here</option>`;
             $.each(response.data.data, function () {
                 category_id += `<option value="${this.id}">${this.name}</option>`;
@@ -121,7 +121,7 @@ const TASK = (() => {
 
     $(document).on("click", ".btn_show", function (event) {
         var target = event.target;
-        axios('task/show/' + target.id).then(function (response) {
+        axios(`${APP_URL}/admin/task/show/` + target.id).then(function (response) {
             $('#btn_save').empty();
             $('#btn_save').append('Save changes');
             $('#btn_cancel').show();
@@ -140,7 +140,7 @@ const TASK = (() => {
             ok: () => {
                 axios({
                     method: 'post',
-                    url: 'task/delete/' + target.id,
+                    url: `${APP_URL}/admin/task/delete/` + target.id,
                 }).then(function (response) {
                     if (response.data.status === 'success') {
                         toastr.success(response.data.message);

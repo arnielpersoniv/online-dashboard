@@ -37,7 +37,7 @@ const CATEGORY = (() => {
         // Send a POST request
         axios({
             method: 'post',
-            url: 'category/store',
+            url: `${APP_URL}/admin/category/store`,
             data: formdata
         }).then(function (response) {
             console.log(response)
@@ -65,7 +65,7 @@ const CATEGORY = (() => {
 
     this_category.load = () => {
         $("#loading").show();
-        axios('../show/all').then(function (response) {
+        axios(`${APP_URL}/admin/show/all`).then(function (response) {
             $('#tbl_category').DataTable().destroy();
             var table;
             var x = 1;
@@ -100,7 +100,7 @@ const CATEGORY = (() => {
 
     $(document).on("click", ".btn_show", function (event) {
         var target = event.target;
-        axios('category/show/' + target.id).then(function (response) {
+        axios(`${APP_URL}/admin/category/show/` + target.id).then(function (response) {
             $('#btn_save').empty();
             $('#btn_save').append('Save changes');
             $('#btn_cancel').show();
@@ -119,7 +119,7 @@ const CATEGORY = (() => {
             ok: () => {
                 axios({
                     method: 'post',
-                    url: 'category/delete/' + target.id,
+                    url: `${APP_URL}/admin/category/delete/` + target.id,
                 }).then(function (response) {
                     if (response.data.status === 'success') {
                         toastr.success(response.data.message);

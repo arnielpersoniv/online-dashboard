@@ -79,7 +79,7 @@ const DASHBOARD = (() => {
         }
         axios({
             method: 'post',
-            url: '../task/report/daily',
+            url: `${APP_URL}/admin/task/report/daily`,
             data: datas
         }).then(function (response) {
             console.log(response)
@@ -120,7 +120,7 @@ const DASHBOARD = (() => {
         }
         axios({
             method: 'post',
-            url: '../task/report/weekly',
+            url: `${APP_URL}/admin/task/report/weekly`,
             data: datas
         }).then(function (response) {
             console.log(response)
@@ -163,7 +163,7 @@ const DASHBOARD = (() => {
         }
         axios({
             method: 'post',
-            url: '../task/report/monthly',
+            url: `${APP_URL}/admin/task/report/monthly`,
             data: datas
         }).then(function (response) {
             $("#tbl_monthly tbody").empty();
@@ -200,7 +200,7 @@ const DASHBOARD = (() => {
         }
         axios({
             method: 'post',
-            url: '../task/report/yearly',
+            url: `${APP_URL}/admin/task/report/yearly`,
             data: datas
         }).then(function (response) {
             $("#tbl_yearly tbody").empty();

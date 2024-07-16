@@ -30,7 +30,7 @@ const ATTENDANCE = (() => {
     })
 
     this_attendance.load = (month) => {
-        axios('../admin/attendance/all/' + month).then(function (response) {
+        axios(`${APP_URL}/admin/attendance/all/` + month).then(function (response) {
             $("#tbl_attendance tbody").empty();
             if (response.data.status === 'success') {
                 var labels = response.data.data.label;

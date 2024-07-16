@@ -73,7 +73,7 @@ const AGENT_ALL_TASK = (() => {
         }
         axios({
             method: 'post',
-            url: '../../task/agent-all',
+            url: `${APP_URL}/task/agent-all`,
             data: datas
         }).then(function (response) {
             $("#loading").show();

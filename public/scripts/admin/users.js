@@ -46,7 +46,7 @@ const USER = (() => {
         // Send a POST request
         axios({
             method: 'post',
-            url: 'user/store',
+            url: `${APP_URL}/admin/user/store`,
             data: formdata
         }).then(function (response) {
             if (response.data.status === 'success') {
@@ -72,7 +72,7 @@ const USER = (() => {
 
     this_user.load = () => {
         $("#loading").show();
-        axios('user/all').then(function (response) {
+        axios(`${APP_URL}/admin/user/all`).then(function (response) {
             $('#tbl_users').DataTable().destroy();
             var table;
             var x = 1;
@@ -114,7 +114,7 @@ const USER = (() => {
 
     $(document).on("click", ".btn_show", function (event) {
         var id = $(this).attr("data-id");
-        axios('user/show/' + id).then(function (response) {
+        axios(`${APP_URL}/admin/user/show/` + id).then(function (response) {
             $('#btn_save').empty();
             $('#btn_save').append('Save changes');
             $('#btn_cancel').show();
@@ -135,7 +135,7 @@ const USER = (() => {
             ok: () => {
                 axios({
                     method: 'post',
-                    url: 'user/delete/' + id,
+                    url: `${APP_URL}/admin/user/delete/` + id,
                 }).then(function (response) {
                     if (response.data.status === 'success') {
                         toastr.success(response.data.message);

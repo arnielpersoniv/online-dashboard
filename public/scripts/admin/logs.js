@@ -10,7 +10,7 @@ const LOGS = (() => {
 
     this_logs.load = () => {
         $("#loading").show();
-        axios('logs/all').then(function (response) {
+        axios(`${APP_URL}/admin/logs/all`).then(function (response) {
             $('#tbl_logs').DataTable().destroy();
             var table;
             var x = 1;

@@ -72,7 +72,7 @@ const AGENT_TASK = (() => {
                 // Send a POST request
                 axios({
                     method: 'post',
-                    url: 'agent/store',
+                    url: `${APP_URL}/task/agent/store`,
                     data: formdata
                 }).then(function (response) {
                     if (response.data.status === 'success' && response.data.action == "store") {
@@ -215,7 +215,7 @@ const AGENT_TASK = (() => {
         // console.log(datas)
         axios({
             method: 'post',
-            url: 'agent-all',
+            url: `${APP_URL}/task/agent-all`,
             data: datas
         }).then(function (response) {
             $('#total_category').empty();
@@ -269,7 +269,7 @@ const AGENT_TASK = (() => {
         }
         axios({
             method: 'post',
-            url: 'agent/running-data',
+            url: `${APP_URL}/task/agent/running-data`,
             data: datas
         }).then(function (response) {
             $("#tbl_agentperformance tbody").empty();
@@ -316,7 +316,7 @@ const AGENT_TASK = (() => {
         var lid_no = $('#lid_no').val();
         //$('#category').prop("disabled", true)
         $('#txt_timestart').val(null);
-        axios('show/task/' + lid_no).then(function (response) {
+        axios(`${APP_URL}/task/show/task/` + lid_no).then(function (response) {
             if (response.data != 0) {
                 //$('#category').prop("disabled", false)
                 $('#label_startend').empty();
@@ -364,7 +364,7 @@ const AGENT_TASK = (() => {
             ok: () => {
                 axios({
                     method: 'post',
-                    url: 'agent-delete/' + id,
+                    url: `${APP_URL}/task/agent-delete/` + id,
                 }).then(function (response) {
                     if (response.data.status === 'success') {
                         toastr.success(response.data.message);

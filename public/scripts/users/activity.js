@@ -81,7 +81,7 @@ const ACTIVITY = (() => {
         // Send a POST request
         axios({
             method: 'post',
-            url: 'store',
+            url: `${APP_URL}/task/store`,
             data: formdata
         }).then(function (response) {
             if (response.data.status === 'success') {
@@ -170,7 +170,7 @@ const ACTIVITY = (() => {
         // console.log(datas)
         axios({
             method: 'post',
-            url: 'all',
+            url: `${APP_URL}/task/all`,
             data: datas
         }).then(function (response) {
             console.log(response)
@@ -269,7 +269,7 @@ const ACTIVITY = (() => {
     }
     this_activity.category = () => {
         $('#category_id').prop("disabled", true);
-        axios('../show/all').then(function (response) {
+        axios(`${APP_URL}/admin/show/all`).then(function (response) {
             var category_id = `<option value="">Select Here</option>`;
             $.each(response.data.data, function () {
                 category_id += `<option value="${this.id}">${this.name}</option>`;
@@ -283,7 +283,7 @@ const ACTIVITY = (() => {
     $('#category_id').on('change', function () {
         $('#task_id').prop("disabled", true);
         var categoryid = $('#category_id').val();
-        axios('../show/edit/' + categoryid).then(function (response) {
+        axios(`${APP_URL}/admin/show/edit/` + categoryid).then(function (response) {
             var tasklist = ``;
             $.each(response.data, function () {
                 tasklist += `<option value="${this.id}">${this.name}</option>`;
@@ -298,7 +298,7 @@ const ACTIVITY = (() => {
         var target = event.target;
         $('form *').prop('disabled', false)
         $('#status').prop('readonly', true)
-        axios('show/' + target.id).then(function (response) {
+        axios(`${APP_URL}/task/show/` + target.id).then(function (response) {
             $('#btn_save').empty();
             $('#btn_save').append('Save changes');
             $('#btn_cancel').show();
@@ -324,7 +324,7 @@ const ACTIVITY = (() => {
             ok: () => {
                 axios({
                     method: 'post',
-                    url: 'action',
+                    url: `${APP_URL}/task/action`,
                     data: data
                 }).then(function (response) {
                     if (response.data.status === 'success') {
@@ -347,7 +347,7 @@ const ACTIVITY = (() => {
             ok: () => {
                 axios({
                     method: 'post',
-                    url: 'delete/' + target.id,
+                    url: `${APP_URL}/task/delete/` + target.id,
                 }).then(function (response) {
                     if (response.data.status === 'success') {
                         toastr.success(response.data.message);
@@ -396,7 +396,7 @@ const ACTIVITY = (() => {
                     $('#btn_pause').prop("disabled", true);
                     axios({
                         method: 'post',
-                        url: 'action',
+                        url: `${APP_URL}/task/action`,
                         data: data
                     }).then(function (response) {
                         if (response.data.status === 'success') {
@@ -429,7 +429,7 @@ const ACTIVITY = (() => {
             ok: () => {
                 axios({
                     method: 'post',
-                    url: 'action',
+                    url: `${APP_URL}/action`,
                     data: data
                 }).then(function (response) {
                     if (response.data.status === 'success') {

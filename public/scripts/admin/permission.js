@@ -35,7 +35,7 @@ const PERMISSION = (() => {
         // Send a POST request
         axios({
             method: 'post',
-            url: 'permission/store',
+            url: `${APP_URL}/permission/store`,
             data: formdata
         }).then(function (response) {
             console.log(response)
@@ -54,7 +54,7 @@ const PERMISSION = (() => {
     });
 
     this_permission.load = () => {
-        axios('permission/all').then(function (response) {
+        axios(`${APP_URL}/permission/all`).then(function (response) {
             $('#tbl_permission').DataTable().destroy();
             var table;
             var x = 1;
@@ -94,7 +94,7 @@ const PERMISSION = (() => {
     document.addEventListener("click", function (event) {
         var target = event.target;
         if (this_permission.isElement(target, 'btn_show')) {
-            axios('permission/show/' + target.id).then(function (response) {
+            axios(`${APP_URL}/permission/show/` + target.id).then(function (response) {
                 $('#permission_name').val(response.data.name)
             }).catch(error => {
                 toastr.error(error);
@@ -110,7 +110,7 @@ const PERMISSION = (() => {
                 ok: () => {
                     axios({
                         method: 'post',
-                        url: 'permission/delete/' + target.id,
+                        url: `${APP_URL}/permission/delete/` + target.id,
                     }).then(function (response) {
                         if (response.data.status === 'success') {
                             toastr.success(response.data.message);

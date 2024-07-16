@@ -75,7 +75,7 @@ const DASHBOARD = (() => {
         }
         axios({
             method: 'post',
-            url: '../wip/report/load',
+            url: `${APP_URL}/admin/wip/report/load`,
             data: datas
         }).then(function (response) {
             $("#tbl_agent tbody").empty();

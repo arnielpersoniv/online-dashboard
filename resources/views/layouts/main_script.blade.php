@@ -12,4 +12,9 @@
 <script src="{{asset('js/global.js')}}"></script>
 <script>
     var APP_URL = {!! json_encode(url('/')) !!}
+    // Get the CSRF token from the meta tag
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    // Configure Axios
+    axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
 </script>

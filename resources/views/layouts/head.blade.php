@@ -13,6 +13,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Online Dashboard</title>
     <!-- Favicon icon -->
-    <link rel="icon" href="{{asset('favicon.ico')}}" type="image/x-icon">
+    <link rel="icon" href="{{asset('favicon.png')}}" type="image/x-icon">
     @include('layouts.main_style')
 </head>

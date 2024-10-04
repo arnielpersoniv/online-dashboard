@@ -12,7 +12,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Online Dashboard</title>
     <!-- Favicon icon -->
-    <link rel="icon" href="{{asset('favicon.ico')}}" type="image/x-icon">
+    <link rel="icon" href="{{asset('favicon.png')}}" type="image/x-icon">
     <link rel="stylesheet" href="{{asset('css/login/bootstrap.min.css')}}" />
     <link rel="stylesheet" href="{{asset('css/login/login-10.css')}}" />
 </head>
@@ -26,7 +26,7 @@
                     <div class="mb-2">
                         <div class="text-center mt-5">
                             <a href="#!">
-                                <img src="./themes/img/personiv-logo.png" alt="BootstrapBrain Logo">
+                                <img src="./themes/img/eClerx-logo.png" class="img-height" alt="eClerx Logo">
                             </a>
                         </div>
                     </div>

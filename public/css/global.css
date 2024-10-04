@@ -86,3 +86,8 @@ a.active:active {
     height: 40px;
     border-radius: 50%
 }
+
+.img-height{
+    height: 70px; 
+    width: auto
+}

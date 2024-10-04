@@ -10,3 +10,8 @@
     position: absolute;
     z-index: -2;
 }
+
+.img-height{
+    height: 70px; 
+    width: auto
+}
